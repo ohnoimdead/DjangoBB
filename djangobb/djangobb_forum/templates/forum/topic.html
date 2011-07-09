@@ -122,7 +122,9 @@
 					{% if moderator or post|forum_posted_by:user %}
 						<li class="postedit">| <a href="{% url djangobb:edit_post post.id %}">{% trans "Edit" %}</a> </li>
 					{% endif %}
-					<li class="postquote">| <a href="{% url djangobb:add_post topic.id %}?post_id={{ post.id }}">{% trans "Reply" %}</a> </li>
+                    {% if not topic.closed and user.is_authenticated %}
+                        <li class="postquote">| <a href="{% url djangobb:add_post topic.id %}?post_id={{ post.id }}">{% trans "Reply" %}</a> </li>
+                    {% endif %}
 					{% if user.is_authenticated %}
 						<li class="postquote">| <a onmouseover="copyQ('{{ post.user.username }}');" href="javascript:pasteQ();">{% trans "Quote" %}</a></li>
 					{% endif %}
@@ -135,7 +137,9 @@
 <div class="postlinksb">
 	<div class="inbox">
 		<p class="pagelink conl">{% pagination %}</p>
-		<p class="postlink conr"><a href="{% url djangobb:add_post topic.id %}">{% trans "Reply" %}</a></p>
+        {% if not topic.closed and user.is_authenticated %}
+            <p class="postlink conr"><a href="{% url djangobb:add_post topic.id %}">{% trans "Reply" %}</a></p>
+        {% endif %}
 				<ul><li><a href="{% url djangobb:index %}">{% trans "Root" %} </a></li><li>&raquo; {% link topic.forum %} </li><li>&raquo; {{ topic }}
 				<a href="{% url djangobb:forum_topic_feed topic.id %}"><img src="{{ MEDIA_URL }}/forum/img/feed-icon-small.png"  alt="[RSS Feed]" title="[RSS Feed]" class="breadcrumb_rss" /></a>
 				</li></ul>
